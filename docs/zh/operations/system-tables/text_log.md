@@ -1,31 +1,53 @@
----
-machine_translated: true
-machine_translated_rev: 5decc73b5dc60054f19087d3690c4eb99446a6c3
----
+# system.text_log {#system_tables-text_log}
 
-# 系统。text_log {#system_tables-text_log}
-
-包含日志记录条目。 进入该表的日志记录级别可以通过以下方式进行限制 `text_log.level` 服务器设置。
+此系统表包含日志条目。 可以在服务器设置中的 `text_log.level` 限制进入该表的日志级别。
 
 列:
 
--   `event_date` (Date) — Date of the entry.
--   `event_time` (DateTime) — Time of the entry.
--   `microseconds` (UInt32) — Microseconds of the entry.
--   `thread_name` (String) — Name of the thread from which the logging was done.
--   `thread_id` (UInt64) — OS thread ID.
--   `level` (`Enum8`) — Entry level. Possible values:
-    -   `1` 或 `'Fatal'`.
-    -   `2` 或 `'Critical'`.
-    -   `3` 或 `'Error'`.
-    -   `4` 或 `'Warning'`.
-    -   `5` 或 `'Notice'`.
-    -   `6` 或 `'Information'`.
-    -   `7` 或 `'Debug'`.
-    -   `8` 或 `'Trace'`.
--   `query_id` (String) — ID of the query.
--   `logger_name` (LowCardinality(String)) — Name of the logger (i.e. `DDLWorker`).
--   `message` (String) — The message itself.
--   `revision` (UInt32) — ClickHouse revision.
--   `source_file` (LowCardinality(String)) — Source file from which the logging was done.
--   `source_line` (UInt64) — Source line from which the logging was done.
+-   `event_date` (Date) — 条目的日期.
+-   `event_time` (DateTime) — 条目的时间.
+-   `event_time_microseconds` (DateTime) — 精度为微秒的条目时间.
+-   `microseconds` (UInt32) — 条目的微秒数.
+-   `thread_name` (String) — 进行日志记录的线程名称.
+-   `thread_id` (UInt64) — 操作系统的线程 ID.
+-   `level` (`Enum8`) — 日志条目等级. 可选值:
+    -   `1` 或者 `'Fatal'`.
+    -   `2` 或者 `'Critical'`.
+    -   `3` 或者 `'Error'`.
+    -   `4` 或者 `'Warning'`.
+    -   `5` 或者 `'Notice'`.
+    -   `6` 或者 `'Information'`.
+    -   `7` 或者 `'Debug'`.
+    -   `8` 或者 `'Trace'`.
+-   `query_id` (String) — 查询的 ID.
+-   `logger_name` (LowCardinality(String)) — 日志记录器(logger)的名称 (i.e. `DDLWorker`).
+-   `message` (String) — 消息本身.
+-   `revision` (UInt32) — ClickHouse 修订版本.
+-   `source_file` (LowCardinality(String)) — 进行日志记录的源文件.
+-   `source_line` (UInt64) — 进行日志记录的源文件的所在行数.
+
+**示例**
+
+``` sql
+SELECT * FROM system.text_log LIMIT 1 \G
+```
+
+``` text
+Row 1:
+──────
+event_date:              2020-09-10
+event_time:              2020-09-10 11:23:07
+event_time_microseconds: 2020-09-10 11:23:07.871397
+microseconds:            871397
+thread_name:             clickhouse-serv
+thread_id:               564917
+level:                   Information
+query_id:
+logger_name:             DNSCacheUpdater
+message:                 Update period 15 seconds
+revision:                54440
+source_file:             /ClickHouse/src/Interpreters/DNSCacheUpdater.cpp; void DB::DNSCacheUpdater::start()
+source_line:             45
+```
+
+ [原文](https://clickhouse.com/docs/zh/operations/system-tables/text_log) <!--hide-->
